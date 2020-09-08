@@ -1,44 +1,154 @@
-# Challenges
+# IHeros
 
-Com o objetivo de se tornar um funcionário ZRP você precisa provar para o nosso timme, um grupo de profissionais extremamente competentes e habilidosos, que você será capaz de analisar, prever e desenvolver as tarefas que te forem designadas.
+## BackEnd
 
-Para cada um dos possíveis cargos que você for se candidatar haverá desafios dos mais diversos níveis, podendo estes serem _fáceis_, _normais_ ou _difíceis_. Você pode submeter o teste que achar que mais se encaixa com o seu perfil.
+O Backend foi desenvolvido com ruby on rails.
 
-## Como submeter o seu projeto
+A aplicação disponibiliza os endpoints para que o frontend possa consumir.
 
-Cada área e cada projeto tem a sua própria regra quanto a submissão do desafio. Leia atentamente as regras e instruções antes de enviar seu projeto.
+Autenticação é feita via token JWT.
 
-> Dúvidas? Envie um email para [jobs@zrp.com.br](jobs@zrp.com.br).
+Dentro do diretório api/v1/controllers optei por criar um um controller chamado api_controller, ele implementa as regras de validação de por token e os controllers users e heros extendem o api_controller e não o application_controller. Criei desta forma pois em caso de ter uma segunda versão da api e se essa segunda versão tiver uma forma diferente de autenticação a versão v1 não seria impactada.
 
-## Como o processo seletivo da ZRP funciona
 
-### Primeira Fase - Seleção
+- Ruby: Version - 2.6.3
 
-Na primeira fase você será avaliado por um dos sócios da ZRP. O objetivo dessa avaliação é ver se você possui aderência à cultura da empresa. Nós prezamos por pessoas prestativas, pró-ativas, comunicativas e interessadas em aprender. Suas core skills serão os seus diferenciais aqui.
+- Rails: Version 5.2.4
 
-### Segunda Fase - Desafio
+Gem's
 
-Se você passar na primeira fase você deverá escolher um desafio que você deseja enviar e nos dar uma previsão de quanto tempo você demorará para enviar aquele desafio.
-Não há tempo limite para a submissão, porém você será avaliado pela sua capacidade de prever seu tempo de entrega.
+- bcrypt - Utilizada para criptografia da senha
 
-Depois desse envio nosso time irá avaliar se:
+- jwt - Geração token autenticação
 
-- Você teve uma boa previsão do tempo que você levaria para resolver o problema
-- Resolveu com precisão o problema apresentado
-- Cumpriu com os requisitos e critérios de avaliação daquele desafio
+- rack-cors - Permitir o compartilhamento de recurso
 
-### Terceira Fase - Feedback
+## Executando o Backend
 
-Para aqueles que submeteram o desafio da segunda fase haverá uma revisão do desafio pelo nosso time e te chamaremos para um breve call de feedback dizendo se você foi contratado ou não e o porque da decisão.
+1.  Instalação do Ruby
 
-### Escolha o seu caminho
+Para executar o backend é necessário ter o ruby instalado, caso não tenha o ruby instalado a instalação pode ser feita com o gerenciador rvm.
 
-Para qual vaga você está se candidatando?
+[Clique aqui para ver como instalar o rvm](https://rvm.io/rvm/install)
 
-- [Desenvolvedor](./dev)
-- [Devops](./devops)
-- [Designer](./design)
-- [PO](./po)
-- [QA](./qa)
-- [Comercial](./comercial)
-- [RH](./rh)
+Após instalar o rvm, instale a versão do ruby
+
+[Como instalar um rubie](https://rvm.io/rubies/installing)
+
+
+2. Apoś instalar o ruby, faça o clone e pelo terminal navegue até a pasta "challenges/dev/iheros" e execute os seguintes comandos:
+
+```ruby. 
+bundle install
+```
+
+Para baixar e instalar todas as gems(libs) do projeto
+
+```ruby. 
+rake db:create
+```
+
+Criar o banco de dados. Para simplificar utilizei o banco sqlite
+
+```ruby. 
+rails db:seed
+```
+Popular o banco de dados com os dados iniciais.
+
+Neste caso vai criar o usuário - email: test@zrp.com.br - password: zrptest
+
+Agora é só rodar
+```ruby. 
+rails -s -p 3001
+```
+
+Rails s - Starta a aplicação e o  -p indica em qual porta a aplicação deve subir (Subir na porta 3001 porque o front esta configurado para rodar na porta 3000).
+
+### Endpoints
+
+Login :[POST] http://localhost:3001/api/v1/login/
+
+```postman
+ex payload: {"email": "test@zrp.com.br", "password": "zrptest"}
+```
+
+Cadastrar Herói : [POST] http://localhost:3001/api/v1/heros/
+
+```postman
+ex payload: {"name":"Homem Codorna", "hero_class": "S", "lat": "23.2136093", "lng": "-45.9096892"}
+```
+
+Editar Herói : [PUT] http://localhost:3001/api/v1/heros/{id}
+
+```postman
+ex payload: {"name":"Homem Codorna", "hero_class": "S", "lat": "23.2136093", "lng": "-45.9096892"}
+```
+
+Deletar Herói : [DELETE] http://localhost:3001/api/v1/heros/{id}
+
+Listar Heróis : [GET] http://localhost:3001/api/v1/heros/
+
+## FrontEnd
+
+O FrontEnd foi criado* utilizando o react
+
+- React: Version - 16.13.1
+
+- Node: Version v12.14.1
+
+Bibliotecas
+
+ - react-router-dom
+ - styled-components
+ - axios
+ 
+## Executando o frontend
+
+Para rodar o frontend é necessário ter o node instalado
+
+[Clique aqui para ver como instalar o node](https://nodejs.org/en/)
+
+Ou instale o gerenciador nvm
+
+Depois, abra o terminal em uma nova aba e navegue até a pasta "challenges/dev/iheros_client" e execute
+
+```node. 
+npm install
+```
+
+Depois execute
+
+```node. 
+npm start
+```
+
+Acesse no browser
+
+```node. 
+http://localhost:3000/
+```
+
+Página inicial
+
+```node. 
+http://localhost:3000/signin
+```
+
+Página de login
+
+```node. 
+http://localhost:3000/logout
+```
+
+Página de logoff
+
+```node. 
+http://localhost:3000/register
+```
+
+Cadastar Herói (Necessário estar logado)
+
+```node. 
+http://localhost:3000/list
+```
+Listar Heróis (Necessário estar logado)
